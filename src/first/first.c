@@ -12,10 +12,9 @@
  ********************************************************************************/
 
 #include <stdio.h>
-#include "../include/hello.h"
+#include "../../include/num.h"
 
-int main(int argc, char *agv[])
+void first()
 {
-    printf("NUM =  %d \n", NUM);
-    return 0;
+    printf("im num is %d\n",NUM);
 }

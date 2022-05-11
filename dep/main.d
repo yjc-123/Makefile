@@ -1,1 +1,1 @@
-obj/main.o dep/main.d : src/main.c src/../include/hello.h
+obj/main.o dep/main.d : main.c include/second.h

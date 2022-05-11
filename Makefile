@@ -4,7 +4,7 @@ DIR_OBJ := obj
 DIR_DEP := dep
 DIRS    := $(DIR_OBJ) $(DIR_DEP) $(DIR_BIN)
 
-SRC  = $(wildcard src/*.c *.c)
+SRC  = $(wildcard  *.c src/first/*.c src/second/*.c)
 DEPS = $(notdir $(SRC:.c=.d))
 #OBJS = $(notdir $(SRC:.c=.o))
 OBJS = $(addprefix $(DIR_OBJ)/,$(notdir $(SRC:.c=.o)))
@@ -18,19 +18,26 @@ $(shell [ -e $(DIR_DEP) ] || mkdir  $(DIR_DEP))
 $(shell [ -e $(DIR_OBJ) ] || mkdir  $(DIR_OBJ))
 $(shell [ -e $(DIR_BIN) ] || mkdir 	$(DIR_BIN))
 
-VPATH = src include $(DIRS)
+VPATH = ./src:./src/first:./src/second
+
+CFLAGS := -g -Wall 
+CFLAGS += -I ./include/
 
 TARGET := main
 
-$(TARGET) : $(OBJS) 
-	gcc -o $(TARGET) $(OBJS)
+$(TARGET) : pre $(OBJS) 
+	gcc  -o $(TARGET) $(CFLAGS) $(OBJS)
 	mv $(TARGET) $(DIR_BIN)
 
 -include $(DIR_DEP)/$(DEPS)
 
+pre:
+	@echo $(SRC) $(OBJS)
+
+
 $(DIR_OBJ)/%.o: %.c
-	@ echo "Creating %.o: %.c $@ file..."
-	gcc $< -c  -o $@
+	@ echo "Creating %.o: %.c $@:$^ file..."
+	gcc  -c  $<  -o $@
 
 $(DIR_DEP)/%.d: %.c
 	@ echo "Creating %.d: %.c $@ file..."
